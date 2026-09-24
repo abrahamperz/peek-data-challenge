@@ -1,0 +1,11 @@
+traffic_source,period,orders,revenue,aov
+Display,post,1094,90513.0,82.74
+Display,pre,107,7768.0,72.6
+Email,post,1302,114253.0,87.75
+Email,pre,126,10802.0,85.73
+Facebook,post,1503,126719.0,84.31
+Facebook,pre,137,12332.0,90.01
+Organic,post,4008,341146.0,85.12
+Organic,pre,386,29760.0,77.1
+Search,post,18324,1580668.0,86.26
+Search,pre,1882,157248.0,83.55
