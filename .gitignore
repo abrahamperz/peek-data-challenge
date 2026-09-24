@@ -1,0 +1,12 @@
+# Never commit credentials or the private challenge doc
+*.pdf
+# exception: the exported slide deck IS a deliverable
+!deck/peek_deck.pdf
+.DS_Store
+*credentials*.json
+application_default_credentials.json
+.env
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.claude/
