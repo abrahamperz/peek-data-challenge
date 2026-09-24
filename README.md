@@ -17,19 +17,6 @@ free-shipping scenario.
 > taken 2026-09-24** (cached in [`data/*.csv`](data/)). A fresh run on another day will likely return
 > slightly different numbers; the *story* is stable.
 
-## Deliverables & links
-
-| Deliverable | Where |
-|---|---|
-| **Part 1 — SQL** (Tasks A–D + cohort stretch) | [`sql/part1_queries.sql`](sql/part1_queries.sql) |
-| **Part 2 — Notebook** (analysis + 5 figures) | [`analysis/peek_analysis.ipynb`](analysis/peek_analysis.ipynb) |
-| **Part 2 — Cached query outputs** | [`data/*.csv`](data/) — so the notebook reproduces without BigQuery |
-| **Part 2 — Slides** (interactive HTML deck) | [`deck/index.html`](deck/index.html) — self-contained; open in any browser · [PDF export](deck/peek_deck.pdf) |
-| **Part 3 — How I used AI** (written response) | [Jump to Part 3 ↓](#part-3--how-i-used-ai) — in this README |
-| **CI** — 3 checks on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml)<br>• **lint** (clean-code) — SQLFluff enforces readable, consistent SQL: uppercase keywords, explicit aliasing, column order, line length<br>• **format** — fails unless every file is already canonically formatted (`sqlfluff format`), so SQL arrives clean<br>• **typecheck** — BigQuery *dry run* validates every table/column/type against the live schema; catches a hallucinated column or wrong type, bills 0 bytes |
-
----
-
 ## Key findings
 
 thelook is a **high-acquisition, low-retention** business. The top line looks great, but almost
@@ -47,6 +34,52 @@ all of the growth is new customers, not repeat behavior.
 **Bottom line:** growth is real and durable, but the business acquires customers far faster than
 it retains them. The biggest lever is not more acquisition — it's closing the month-0 → month-1
 retention cliff.
+
+---
+
+## Deliverables & links
+
+| Deliverable | Where |
+|---|---|
+| **Part 1 — SQL** (Tasks A–D + cohort stretch) | [`sql/part1_queries.sql`](sql/part1_queries.sql) |
+| **Part 2 — Notebook** (analysis + 5 figures) | [`analysis/peek_analysis.ipynb`](analysis/peek_analysis.ipynb) |
+| **Part 2 — Cached query outputs** | [`data/*.csv`](data/) — so the notebook reproduces without BigQuery |
+| **Part 2 — Slides** (interactive HTML deck) | [`deck/index.html`](deck/index.html) — self-contained; open in any browser · [PDF export](deck/peek_deck.pdf) |
+| **Part 3 — How I used AI** (written response) | [Jump to Part 3 ↓](#part-3--how-i-used-ai) — in this README |
+| **CI** — 3 checks on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml)<br>• **lint** (clean-code) — SQLFluff enforces readable, consistent SQL: uppercase keywords, explicit aliasing, column order, line length<br>• **format** — fails unless every file is already canonically formatted (`sqlfluff format`), so SQL arrives clean<br>• **typecheck** — BigQuery *dry run* validates every table/column/type against the live schema; catches a hallucinated column or wrong type, bills 0 bytes |
+
+---
+
+## Clean code — SQL style & linting
+
+Every query is checked in CI against the rules pinned in [`.sqlfluff`](.sqlfluff). **Lint** reports
+style issues; **format** rewrites the file to satisfy them (the format job fails the build unless the
+SQL is already canonically formatted). Anything not listed here runs on SQLFluff's defaults.
+
+**General config**
+
+| Rule | Value | What it does |
+|---|---|---|
+| `dialect` | `bigquery` | Parses BigQuery Standard SQL syntax. |
+| `templater` | `raw` | Treats SQL as plain text (no Jinja/dbt templating). |
+| `max_line_length` | `120` | No line exceeds 120 characters — readability. |
+| `indent_unit` / `tab_space_size` | spaces, `2` | Indents with 2 spaces (no tabs). |
+
+**Style rules**
+
+| Rule | Policy | Example |
+|---|---|---|
+| `capitalisation.keywords` | `UPPER` | `SELECT`, `FROM`, `WHERE` |
+| `capitalisation.functions` | `UPPER` | `SUM()`, `DATE_TRUNC()` |
+| `capitalisation.literals` | `UPPER` | `NULL`, `TRUE`, `FALSE` |
+| `capitalisation.identifiers` | `lower` | `order_revenue`, `params` |
+| `aliasing.table` | `explicit` | `order_items AS oi` (not `order_items oi`) |
+| `aliasing.column` | `explicit` | `SUM(sale_price) AS revenue` |
+
+The idea: **language keywords in UPPERCASE, your own names in lowercase**, so syntax reads as
+distinct from schema; explicit `AS` aliases avoid the hard-to-read `table alias` juxtaposition.
+(A third CI job, the BigQuery **dry-run typecheck**, validates every table/column/type against the
+live schema — that one enforces correctness, not style.)
 
 ---
 
