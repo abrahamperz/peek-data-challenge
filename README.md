@@ -259,7 +259,10 @@ group so the pre/post read is causal rather than directional.
 1. **Attack retention, not just the funnel.** With ~96% 90-day churn and ~3% month-1 retention, a few
    points of retention compound faster than equivalent spend on acquisition. Stand up a lifecycle
    program — post-purchase onboarding, a day-30/60 win-back — explicitly targeting the month-0 →
-   month-1 cliff, and track repeat-rate at 30/60/90 days as the north-star.
+   month-1 cliff, and track repeat-rate at 30/60/90 days as the north-star. Add a one-question survey
+   (small incentive, fired at the churn moment) to learn *why* buyers don't return, and test a
+   next-purchase coupon as a separate lever, measured against a holdout so we read *incremental*
+   repeats — not redemptions inflated by response and survivorship bias.
 2. **Grow the returning-revenue share deliberately.** It has drifted up to ~16% (peaking near 20%) on its own; make it a
    goal. Test loyalty / replenishment nudges on first-time buyers in the highest-margin categories,
    and measure incremental repeat purchases, not just redemption.
